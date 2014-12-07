@@ -171,6 +171,8 @@ public class WebActivity extends Activity {
     }
     private Handler uiHandler = new Handler() {
 		public void handleMessage(android.os.Message msg) {
+			if(data == null)
+				return;
 			switch(msg.what){
 			case 1:
 				webView = new WebView(WebActivity.this);
@@ -306,7 +308,7 @@ public class WebActivity extends Activity {
 		if(data != null)
 			return data.indexOf("<html>") >= 0;
 		else
-			return false;	
+			return false;
 	}
 	private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
 

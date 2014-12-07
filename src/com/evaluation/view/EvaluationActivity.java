@@ -216,7 +216,6 @@ public class EvaluationActivity extends Activity implements OnClickListener, OnI
 				e.printStackTrace();
 			}
 			handler.sendEmptyMessage(data);
-
 		}
 	}
 	
