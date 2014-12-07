@@ -13,7 +13,7 @@ import android.hardware.usb.UsbManager;
 import com.evaluation.control.AccountManager;
 import com.evaluation.control.AnnouncementManager;
 import com.evaluation.control.WebServiceManager;
-import com.evaluation.dao.DatabaseAdapter;
+import com.evaluation.dao.DatabaseManager;
 import com.evaluation.model.Announcement;
 import com.evaluation.model.LeaveMessage;
 import com.evaluation.model.User;
@@ -84,11 +84,11 @@ public class MainActivity extends FragmentActivity implements OnClickListener {
 	private String[] contents; //图片对应的正文
 	private ArrayList<View> dots; // 图片标题正文的那些点
 
-	private TextView leaveMessageView;
+	//private TextView leaveMessageView;
 	private ImageButton setting;
 	private ImageButton evaluation;
 	private Button quit;
-	private ImageButton complaint;
+	//private ImageButton complaint;
 	private TextView weekView;
 	private TextView dateView;
 	private TextView timeView;
@@ -104,7 +104,7 @@ public class MainActivity extends FragmentActivity implements OnClickListener {
 	private TextView acceptBiz;
 	private int currentItem = 0; // 当前图片的索引号
 	private Handler announHandler = new AnnounHandler();
-	private DatabaseAdapter dba;
+	private DatabaseManager dba;
 	private String loginId;
 	private String account;
 	private User user;
@@ -151,30 +151,30 @@ public class MainActivity extends FragmentActivity implements OnClickListener {
 	};
 	
 	// 获取工作人员请假信息
-		private Handler leaveMessageHandler = new Handler() {
-			public void handleMessage(android.os.Message msg) {
-		        if(msg.what == 1) {
-		        	leaveMessageView.setText("请假中");
-		        	leaveMessageView.setBackgroundColor(Color.GRAY);
-		        	if(scheduledExecutorService != null) {
-		    			scheduledExecutorService.shutdown();
-		    			scheduledExecutorService = null;
-		    			//activityOver = false;
-		    			annosOk = false;
-		    		}
-		        	tv_content.setText(leaveMessage.getDescription());
-		        }else {
-		        	leaveMessageView.setText("正在服务");
-		        	leaveMessageView.setBackgroundColor(Color.GREEN);
-		        	if(scheduledExecutorService == null) {
-		    			scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
-		    			// 当Activity显示出来后，每两秒钟切换一次图片显示
-		    			scheduledExecutorService.scheduleAtFixedRate(new ScrollTask(), 4, 4, TimeUnit.SECONDS);
-			        	annosOk = true;
-		    		}
-		        }
-			};
-		};
+//		private Handler leaveMessageHandler = new Handler() {
+//			public void handleMessage(android.os.Message msg) {
+//		        if(msg.what == 1) {
+//		        	leaveMessageView.setText("请假中");
+//		        	leaveMessageView.setBackgroundColor(Color.GRAY);
+//		        	if(scheduledExecutorService != null) {
+//		    			scheduledExecutorService.shutdown();
+//		    			scheduledExecutorService = null;
+//		    			//activityOver = false;
+//		    			annosOk = false;
+//		    		}
+//		        	tv_content.setText(leaveMessage.getDescription());
+//		        }else {
+//		        	leaveMessageView.setText("正在服务");
+//		        	leaveMessageView.setBackgroundColor(Color.GREEN);
+//		        	if(scheduledExecutorService == null) {
+//		    			scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
+//		    			// 当Activity显示出来后，每两秒钟切换一次图片显示
+//		    			scheduledExecutorService.scheduleAtFixedRate(new ScrollTask(), 4, 4, TimeUnit.SECONDS);
+//			        	annosOk = true;
+//		    		}
+//		        }
+//			};
+//		};
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -205,12 +205,12 @@ public class MainActivity extends FragmentActivity implements OnClickListener {
 			e.printStackTrace();
 		}
 		//Typeface MSFace = Typeface.createFromAsset(getAssets(),"fonts/MSYHBD.TTF");
-        leaveMessageView = (TextView) findViewById(R.id.leave_message);
+        //leaveMessageView = (TextView) findViewById(R.id.leave_message);
         dateView = (TextView) findViewById(R.id.date);
 		weekView = (TextView) findViewById(R.id.week);
 		timeView = (TextView) findViewById(R.id.time);
 		setting = (ImageButton) findViewById(R.id.setting);
-		complaint = (ImageButton) findViewById(R.id.complaint);
+//		complaint = (ImageButton) findViewById(R.id.complaint);
 		
 		photoView = (ImageView) findViewById(R.id.photo);
 		userNameView = (TextView) findViewById(R.id.user_name);
@@ -288,16 +288,16 @@ public class MainActivity extends FragmentActivity implements OnClickListener {
 		leaveDialog.setCanceledOnTouchOutside(false);
 		complaintDialog = new ComplaintDialog(this, R.layout.complaint_dialog, R.style.Theme_dialog);
 		complaintDialog.setCanceledOnTouchOutside(false);
-		complaint.setOnClickListener(new OnClickListener(){
-
-			@Override
-			public void onClick(View arg0) {
-				// TODO Auto-generated method stub
-				Intent intent = new Intent(MainActivity.this,ComplaintActivity.class);
-				MainActivity.this.startActivity(intent);
-			}
-			
-		});
+//		complaint.setOnClickListener(new OnClickListener(){
+//
+//			@Override
+//			public void onClick(View arg0) {
+//				// TODO Auto-generated method stub
+//				Intent intent = new Intent(MainActivity.this,ComplaintActivity.class);
+//				MainActivity.this.startActivity(intent);
+//			}
+//			
+//		});
 		startService();
 	}
 	
@@ -324,8 +324,8 @@ public class MainActivity extends FragmentActivity implements OnClickListener {
 		activityOver = false;
 		Thread dateThread = new DateThread();
 		dateThread.start();
-		Thread leaveMessageThread = new LeaveMessageThread();
-		leaveMessageThread.start();
+//		Thread leaveMessageThread = new LeaveMessageThread();
+//		leaveMessageThread.start();
 		for(Button button : buttons) {
 			button.setEnabled(true);
 		}
@@ -569,7 +569,8 @@ public class MainActivity extends FragmentActivity implements OnClickListener {
 	
 	private class AnnounThread extends Thread {
 		public void run() {
-			dba = new DatabaseAdapter(MainActivity.this);
+			DatabaseManager.initializeInstance(MainActivity.this);
+			dba = DatabaseManager.getInstance();
 			dba.open();
 			user = dba.findUserByAccount(account);
 			String absolutePath = getFilesDir().getAbsolutePath();
@@ -930,29 +931,29 @@ public class MainActivity extends FragmentActivity implements OnClickListener {
 		}
 		return time.before(new Date());
 	}
-	private class LeaveMessageThread extends Thread {
-		public void run() {
-			while(!activityOver) {
-				WebServiceManager wsm = new WebServiceManager(MainActivity.this);
-				leaveMessage = wsm.getDeviceUserStatus();
-				if(leaveMessage == null)
-					return;
-				String dateFormat = "";
-				if(beforeNow(leaveMessage.getStartDate(), dateFormat) && afterNow(leaveMessage.getEndDate(), dateFormat)) {
-					//请假中
-					leaveMessageHandler.sendEmptyMessage(1);
-				}else{
-					//正常工作中
-					leaveMessageHandler.sendEmptyMessage(2);
-				}
-				try {
-					Thread.sleep(20 * 60 * 1000);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-					continue;
-				}
-			}
-		}
-	}
+//	private class LeaveMessageThread extends Thread {
+//		public void run() {
+//			while(!activityOver) {
+//				WebServiceManager wsm = new WebServiceManager(MainActivity.this);
+//				leaveMessage = wsm.getDeviceUserStatus();
+//				if(leaveMessage == null)
+//					return;
+//				String dateFormat = "";
+//				if(beforeNow(leaveMessage.getStartDate(), dateFormat) && afterNow(leaveMessage.getEndDate(), dateFormat)) {
+//					//请假中
+//					leaveMessageHandler.sendEmptyMessage(1);
+//				}else{
+//					//正常工作中
+//					leaveMessageHandler.sendEmptyMessage(2);
+//				}
+//				try {
+//					Thread.sleep(20 * 60 * 1000);
+//				} catch (InterruptedException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//					continue;
+//				}
+//			}
+//		}
+//	}
 }

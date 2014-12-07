@@ -54,7 +54,7 @@ public class WebServiceManager {
 		rpc.addProperty("ComplaintPhone", tel);
 		rpc.addProperty("ComplaintEmail", email);
 		rpc.addProperty("ComplaintContent", content);
-        rpc.addProperty("DeviceKey", deviceKey);
+        rpc.addProperty("DeviceKey", "61bb91a67ad7c13e");
      // 获取返回的结果  
       SoapObject object = getRemoteInfo();
       String result = object.getProperty("AddUserComplaintsPadResult").toString();

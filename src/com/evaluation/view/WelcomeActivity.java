@@ -3,7 +3,7 @@ package com.evaluation.view;
 import java.util.List;
 
 import com.evaluation.control.AccountManager;
-import com.evaluation.dao.DatabaseAdapter;
+import com.evaluation.dao.DatabaseManager;
 import com.evaluation.model.User;
 import com.evaluation.util.ApkInstaller;
 
@@ -37,7 +37,7 @@ public class WelcomeActivity extends Activity implements AnimationListener {
 	private String result = "";
 	private String TAG = "effort";
 	private String assetsApk = "SpeechService.apk";
-	private DatabaseAdapter dba;
+	private DatabaseManager dba;
 	private boolean activityOver = false;
 	
 	@Override
@@ -62,7 +62,8 @@ public class WelcomeActivity extends Activity implements AnimationListener {
 		//获得实例对象  
         sp = this.getSharedPreferences("userInfo", Context.MODE_WORLD_READABLE);
         //初始化数据库
-        dba = new DatabaseAdapter(this);
+        DatabaseManager.initializeInstance(this);
+		dba = DatabaseManager.getInstance();
 		dba.open();
         init();
         Thread welcomeThread = new WelcomeThread();

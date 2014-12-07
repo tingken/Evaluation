@@ -70,6 +70,7 @@ public class WebActivity extends Activity {
 //		webLayout.addView(webView);
 		tag = this.getIntent().getIntExtra("tag", 0);
 		loginId = this.getIntent().getStringExtra("loginId");
+		Log.e(TAG, "tag:" + tag + ",loginId:" + loginId);
 //		String url = this.getIntent().getStringExtra("url");
 //		String content = this.getIntent().getStringExtra("content");
 //		String title = this.getIntent().getStringExtra("title");

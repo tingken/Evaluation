@@ -15,12 +15,7 @@
             android:layout_width="79px"
             android:layout_height="72px"
             android:background="@null" />
-		<ImageButton
-            android:id="@+id/complaint"
-            android:layout_width="78px"
-            android:layout_height="66px"
-            android:background="@drawable/btn_complaint_selector"
-            android:layout_toLeftOf="@+id/setting" />
+		
         <ImageButton
             android:id="@+id/setting"
             android:layout_width="78px"
@@ -101,14 +96,6 @@
 			    	        android:layout_height="35px"
 			    	        android:gravity="center"
 							android:layout_marginTop="166px">
-							<TextView
-							    android:id="@+id/leave_message"
-							    android:background="#445566"
-							    android:textColor="#ffffff"
-							    android:textSize="18px"
-							    android:gravity="center"
-							    android:layout_width="112px"
-							    android:layout_height="match_parent"/>"
 						</LinearLayout>
 		    	    </FrameLayout>
 
